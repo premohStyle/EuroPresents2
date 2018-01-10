@@ -13,7 +13,18 @@
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteY="231dp"
         tools:layout_editor_absoluteX="8dp"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginTop="21dp"
+        android:layout_below="@+id/button_facebook_login"
+        android:layout_alignLeft="@+id/button_facebook_login"
+        android:layout_alignStart="@+id/button_facebook_login" />
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/button_facebook_login"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteY="231dp"
+        tools:layout_editor_absoluteX="8dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="136dp" />
 
 </RelativeLayout>
