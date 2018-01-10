@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">EuroPresents</string>
+    <string name="not_log_in">Log in failed</string>
+</resources>

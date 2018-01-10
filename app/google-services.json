@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "962759053685",
+    "firebase_url": "https://europresents-f5f5d.firebaseio.com",
+    "project_id": "europresents-f5f5d",
+    "storage_bucket": "europresents-f5f5d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:962759053685:android:67589e235e6dc0a5",
+        "android_client_info": {
+          "package_name": "com.project.ciaprojects.europresents"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "962759053685-fvafssnl32vgltaqq745khlae7qmps46.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.project.ciaprojects.europresents",
+            "certificate_hash": "6ff21932fdbe87bd54d95311b47f421d0eb89599"
+          }
+        },
+        {
+          "client_id": "962759053685-u7qclngedvf7nos624astvqcm733f5tb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTGLoyjL80GvVNf9jd1BldqkTYjRFk7Vo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "962759053685-u7qclngedvf7nos624astvqcm733f5tb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
