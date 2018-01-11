@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -31,6 +32,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final int SIGNIN_CODE = 777;
+    private static final int SIGNIN_CODE_FACEBOOK = 778;
     private static final String TAG = "MAIN ACTIVITY";
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -39,6 +41,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     
     private CallbackManager mCallbackManager;
 
+    LoginButton loginButton;
+    SignInButton signInButton;
+    ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail().build();
+
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         googleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
@@ -56,14 +64,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-
+               FirebaseUser user = mAuth.getCurrentUser();
+                if (user != null){
+                    goMainWindow();
+                }
             }
         };
 
-        SignInButton signInButton = (SignInButton) findViewById(R.id.signin_button);
+        signInButton = (SignInButton) findViewById(R.id.signin_button);
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
+                loginButton.setVisibility(View.INVISIBLE);
+                signInButton.setVisibility(View.INVISIBLE);
                 Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
                 startActivityForResult(intent, SIGNIN_CODE);
             }
@@ -71,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = (LoginButton) findViewById(R.id.button_facebook_login);
+        loginButton = (LoginButton) findViewById(R.id.button_facebook_login);
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -96,6 +110,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private void handleFacebookAccessToken(AccessToken accessToken) {
         Log.d(TAG, "handleFacebookAccessToken:" + accessToken);
+        progressBar.setVisibility(View.VISIBLE);
+        loginButton.setVisibility(View.INVISIBLE);
+        signInButton.setVisibility(View.INVISIBLE);
+
 
         AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
         mAuth.signInWithCredential(credential)
@@ -107,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
+                            goMainWindow();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -114,6 +133,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
+                        progressBar.setVisibility(View.INVISIBLE);
+                        loginButton.setVisibility(View.VISIBLE);
+                        signInButton.setVisibility(View.VISIBLE);
 
                         // ...
                     }
@@ -150,11 +172,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()){
-            Intent intent = new Intent(this, MainWindowActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            goMainWindow();
         } else{
             Toast.makeText(this, R.string.not_log_in, Toast.LENGTH_SHORT).show();
         }
+        progressBar.setVisibility(View.INVISIBLE);
+        loginButton.setVisibility(View.VISIBLE);
+        signInButton.setVisibility(View.VISIBLE);
+    }
+
+    private void goMainWindow() {
+        Intent intent = new Intent(this, MainWindowActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mAuth.removeAuthStateListener(mAuthListener);
     }
 }
