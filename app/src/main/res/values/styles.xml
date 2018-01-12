@@ -8,4 +8,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="FacebookLoginButton">
+        <item name="android:textSize">10dp</item>
+        <item name="android:height">50dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+    <style name="redondeado">
+        <item name="android:radius">20dp</item>
+    </style>
+
 </resources>

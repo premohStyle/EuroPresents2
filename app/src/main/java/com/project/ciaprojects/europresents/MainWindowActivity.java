@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -27,6 +28,7 @@ public class MainWindowActivity extends AppCompatActivity implements GoogleApiCl
     Button logoutBt, revokeBt;
     TextView nameTv, mailTv, idTv;
     ImageView userIv;
+    Intent intent;
 
     private GoogleApiClient googleApiClient;
 
@@ -34,6 +36,8 @@ public class MainWindowActivity extends AppCompatActivity implements GoogleApiCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_window);
+
+        intent = this.getIntent();
 
         logoutBt = (Button) findViewById(R.id.logout_bt);
         revokeBt = (Button) findViewById(R.id.revoke_bt);
@@ -49,30 +53,33 @@ public class MainWindowActivity extends AppCompatActivity implements GoogleApiCl
             }
         });
 
-        /*
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail().build();
+        if (intent.getIntExtra("typeLogin", 0)==MainActivity.GOOGLE_LOGIN) {
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail().build();
 
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-        */
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .enableAutoManage(this, this)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
+        } else  if (intent.getIntExtra("typeLogin", 0)==MainActivity.FACEBOOK_LOGIN) {
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (user != null){
-            String name = user.getDisplayName();
-            String email = user.getEmail();
-            String id = user.getUid();
+            if (user != null) {
+                String name = user.getDisplayName();
+                String email = user.getEmail();
+                String id = user.getUid();
 
-            nameTv.setText(name);
-            mailTv.setText(email);
-            idTv.setText(id);
+                nameTv.setText(name);
+                mailTv.setText(email);
+                idTv.setText(id);
 
-            Glide.with(this).load(user.getPhotoUrl()).into(userIv);
+                Glide.with(this).load(user.getPhotoUrl()).into(userIv);
 
-        } else{
+            } else {
+                goMainScreen();
+            }
+        } else {
             goMainScreen();
         }
 
@@ -82,20 +89,20 @@ public class MainWindowActivity extends AppCompatActivity implements GoogleApiCl
     protected void onStart() {
         super.onStart();
 
-        /*
-        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
-        if (opr.isDone()){
-            GoogleSignInResult result = opr.get();
-            handleSignInResult(result);
-        } else{
-            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                @Override
-                public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
-                    handleSignInResult(googleSignInResult);
-                }
-            });
+        if (intent.getIntExtra("typeLogin", 0)==MainActivity.GOOGLE_LOGIN) {
+            OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
+            if (opr.isDone()) {
+                GoogleSignInResult result = opr.get();
+                handleSignInResult(result);
+            } else {
+                opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                    @Override
+                    public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
+                        handleSignInResult(googleSignInResult);
+                    }
+                });
+            }
         }
-        */
 
     }
 

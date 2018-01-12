@@ -3,4 +3,8 @@
     <string name="not_log_in">Log in failed</string>
     <string name="facebook_app_id">142020106486427</string>
     <string name="fb_login_protocol_scheme">fb142020106486427</string>
+    <string name="signin">Sign in</string>
+    <string name="user">User</string>
+    <string name="password">Password</string>
+    <string name="login">Log in</string>
 </resources>

@@ -6,7 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -31,9 +34,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
-    private static final int SIGNIN_CODE = 777;
-    private static final int SIGNIN_CODE_FACEBOOK = 778;
     private static final String TAG = "MAIN ACTIVITY";
+    public static final int MAIL_LOGIN = 1;
+    public static final int FACEBOOK_LOGIN = 2;
+    public static final int GOOGLE_LOGIN = 3;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -41,9 +45,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     
     private CallbackManager mCallbackManager;
 
-    LoginButton loginButton;
-    SignInButton signInButton;
-    ProgressBar progressBar;
+    private RelativeLayout contentLayout;
+    private LoginButton facebookLoginButton;
+    private SignInButton signInButton;
+    private ProgressBar progressBar;
+    private Button signinButton, loginButton;
+    private EditText etUser, etPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +60,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail().build();
 
+        contentLayout = (RelativeLayout) findViewById(R.id.content_layout);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        loginButton = (Button) findViewById(R.id.login_button);
+        signinButton = (Button) findViewById(R.id.signin_button);
+        etUser = (EditText) findViewById(R.id.et_user);
+        etPassword = (EditText) findViewById(R.id.et_password);
 
         googleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
@@ -66,28 +78,27 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                FirebaseUser user = mAuth.getCurrentUser();
                 if (user != null){
-                    goMainWindow();
+                    goMainWindow(GOOGLE_LOGIN);
                 }
             }
         };
 
-        signInButton = (SignInButton) findViewById(R.id.signin_button);
+        signInButton = (SignInButton) findViewById(R.id.button_gmail_login);
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
-                loginButton.setVisibility(View.INVISIBLE);
-                signInButton.setVisibility(View.INVISIBLE);
+                contentLayout.setVisibility(View.INVISIBLE);
                 Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-                startActivityForResult(intent, SIGNIN_CODE);
+                startActivityForResult(intent, GOOGLE_LOGIN);
             }
         });
 
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
-        loginButton = (LoginButton) findViewById(R.id.button_facebook_login);
-        loginButton.setReadPermissions("email", "public_profile");
-        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+        facebookLoginButton = (LoginButton) findViewById(R.id.button_facebook_login);
+        facebookLoginButton.setReadPermissions("email", "public_profile");
+        facebookLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
@@ -111,8 +122,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private void handleFacebookAccessToken(AccessToken accessToken) {
         Log.d(TAG, "handleFacebookAccessToken:" + accessToken);
         progressBar.setVisibility(View.VISIBLE);
-        loginButton.setVisibility(View.INVISIBLE);
-        signInButton.setVisibility(View.INVISIBLE);
+        contentLayout.setVisibility(View.INVISIBLE);
 
 
         AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
@@ -125,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
-                            goMainWindow();
+                            goMainWindow(FACEBOOK_LOGIN);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -161,10 +171,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SIGNIN_CODE){
+        if (requestCode == GOOGLE_LOGIN){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
-        } else{
+        } else {
             // Pass the activity result back to the Facebook SDK
             mCallbackManager.onActivityResult(requestCode, resultCode, data);
         }
@@ -172,18 +182,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()){
-            goMainWindow();
+            goMainWindow(GOOGLE_LOGIN);
         } else{
             Toast.makeText(this, R.string.not_log_in, Toast.LENGTH_SHORT).show();
         }
         progressBar.setVisibility(View.INVISIBLE);
-        loginButton.setVisibility(View.VISIBLE);
-        signInButton.setVisibility(View.VISIBLE);
+        contentLayout.setVisibility(View.VISIBLE);
     }
 
-    private void goMainWindow() {
+    private void goMainWindow(int typeLogin) {
         Intent intent = new Intent(this, MainWindowActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("typeLogin", typeLogin);
         startActivity(intent);
     }
 
