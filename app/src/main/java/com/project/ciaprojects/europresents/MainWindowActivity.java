@@ -53,32 +53,19 @@ public class MainWindowActivity extends AppCompatActivity implements GoogleApiCl
             }
         });
 
-        if (intent.getIntExtra("typeLogin", 0)==MainActivity.GOOGLE_LOGIN) {
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestEmail().build();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-            googleApiClient = new GoogleApiClient.Builder(this)
-                    .enableAutoManage(this, this)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build();
-        } else  if (intent.getIntExtra("typeLogin", 0)==MainActivity.FACEBOOK_LOGIN) {
+        if (user != null) {
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+            String id = user.getUid();
 
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            nameTv.setText(name);
+            mailTv.setText(email);
+            idTv.setText(id);
 
-            if (user != null) {
-                String name = user.getDisplayName();
-                String email = user.getEmail();
-                String id = user.getUid();
+            Glide.with(this).load(user.getPhotoUrl()).into(userIv);
 
-                nameTv.setText(name);
-                mailTv.setText(email);
-                idTv.setText(id);
-
-                Glide.with(this).load(user.getPhotoUrl()).into(userIv);
-
-            } else {
-                goMainScreen();
-            }
         } else {
             goMainScreen();
         }
@@ -88,47 +75,16 @@ public class MainWindowActivity extends AppCompatActivity implements GoogleApiCl
     @Override
     protected void onStart() {
         super.onStart();
-
-        if (intent.getIntExtra("typeLogin", 0)==MainActivity.GOOGLE_LOGIN) {
-            OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
-            if (opr.isDone()) {
-                GoogleSignInResult result = opr.get();
-                handleSignInResult(result);
-            } else {
-                opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                    @Override
-                    public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
-                        handleSignInResult(googleSignInResult);
-                    }
-                });
-            }
-        }
-
-    }
-
-    private void handleSignInResult(GoogleSignInResult result) {
-        if (result.isSuccess()){
-            GoogleSignInAccount account = result.getSignInAccount();
-            nameTv.setText(account.getDisplayName());
-            mailTv.setText(account.getEmail());
-            idTv.setText(account.getId());
-
-            Glide.with(this).load(account.getPhotoUrl()).into(userIv);
-
-
-        } else {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-    public void logout(){
+
+    public void logout() {
         LoginManager.getInstance().logOut();
+        FirebaseAuth.getInstance().signOut();
         goMainScreen();
     }
 
