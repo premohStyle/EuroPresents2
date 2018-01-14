@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail().build();
 
+
         contentLayout = (RelativeLayout) findViewById(R.id.content_layout);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         loginButton = (Button) findViewById(R.id.login_button);
