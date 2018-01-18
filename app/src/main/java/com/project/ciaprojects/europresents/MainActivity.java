@@ -49,9 +49,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private RelativeLayout contentLayout;
     private LoginButton facebookLoginButton;
-    private SignInButton signInButton;
+    private SignInButton signInButtonGmail;
     private ProgressBar progressBar;
-    private Button signinButton, loginButton;
+    private Button signinButton, loginButton, buttonGmailLogin;
     private EditText etUser, etPassword;
 
     @Override
@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         };
 
-        signInButton = (SignInButton) findViewById(R.id.button_gmail_login);
-        signInButton.setOnClickListener(new View.OnClickListener() {
+        signInButtonGmail = (SignInButton) findViewById(R.id.button_gmail_login);
+        signInButtonGmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
@@ -123,6 +123,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 // ...
             }
         });
+
+        signinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goSigninActivity();
+            }
+        });
+    }
+
+    private void goSigninActivity() {
+        Intent intent = new Intent(this, SigninActivity.class);
+        startActivity(intent);
     }
 
     private void handleFacebookAccessToken(AccessToken accessToken) {
@@ -150,8 +162,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                             updateUI(null);
                         }
                         progressBar.setVisibility(View.INVISIBLE);
-                        loginButton.setVisibility(View.VISIBLE);
-                        signInButton.setVisibility(View.VISIBLE);
+                        contentLayout.setVisibility(View.VISIBLE);
 
                         // ...
                     }
