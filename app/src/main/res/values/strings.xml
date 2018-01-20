@@ -17,4 +17,12 @@
     <string name="send">Send</string>
     <string name="validation_empty_fields">You must complete all fields</string>
     <string name="validation_password_not_match">The password doesn\'t match</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="resend_email">Resend email</string>
+    <string name="cancel">Cancel</string>
+    <string name="dialog_email_verification">You must verify your email</string>
+    <string name="accept">Accept</string>
+    <string name="email_verification">Email verification</string>
 </resources>

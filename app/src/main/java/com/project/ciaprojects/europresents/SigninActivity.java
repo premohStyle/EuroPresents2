@@ -143,21 +143,23 @@ public class SigninActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(
-                                    new OnCompleteListener<AuthResult>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<AuthResult> task) {
-                                            if (task.isSuccessful()) {
-                                                goMainWindow();
-                                            } else {
-                                                // If sign in fails, display a message to the user.
-                                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                                Toast.makeText(SigninActivity.this, "Authentication failed.",
-                                                        Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
+                            final FirebaseUser user = firebaseAuth.getCurrentUser();
+                            user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(SigninActivity.this,
+                                                "Verification email sent to " + user.getEmail(),
+                                                Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Log.e(TAG, "sendEmailVerification", task.getException());
+                                        Toast.makeText(SigninActivity.this,
+                                                "Failed to send verification email.",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                            goMainActivity();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -206,6 +208,12 @@ public class SigninActivity extends AppCompatActivity {
 
     private void goMainWindow() {
         Intent intent = new Intent(this, MainWindowActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    private void goMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

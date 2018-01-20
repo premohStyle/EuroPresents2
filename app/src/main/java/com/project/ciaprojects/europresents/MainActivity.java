@@ -1,5 +1,8 @@
 package com.project.ciaprojects.europresents;
 
+import android.app.AlertDialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +36,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.project.ciaprojects.europresents.fragment.EmailVerificationDialogFragment;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -40,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     public static final int MAIL_LOGIN = 1;
     public static final int FACEBOOK_LOGIN = 2;
     public static final int GOOGLE_LOGIN = 3;
+    private static final java.lang.String TAG_EMAIL_VERIFICATION = "EmailVerification";
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -52,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private SignInButton signInButtonGmail;
     private ProgressBar progressBar;
     private Button signinButton, loginButton, buttonGmailLogin;
-    private EditText etUser, etPassword;
+    private EditText etEmail, etPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         loginButton = (Button) findViewById(R.id.login_button);
         signinButton = (Button) findViewById(R.id.signin_button);
-        etUser = (EditText) findViewById(R.id.et_user);
+        etEmail = (EditText) findViewById(R.id.et_email);
         etPassword = (EditText) findViewById(R.id.et_password);
 
         googleApiClient = new GoogleApiClient.Builder(this)
@@ -124,6 +129,36 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
 
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
+                contentLayout.setVisibility(View.INVISIBLE);
+                String email = etEmail.getText().toString();
+                String password = etPassword.getText().toString();
+                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        contentLayout.setVisibility(View.VISIBLE);
+                        if (task.isSuccessful()) {
+                            final FirebaseUser user = mAuth.getCurrentUser();
+                            if (user.isEmailVerified()){
+                               goMainWindow();
+                            } else {
+                                EmailVerificationDialogFragment emailVerification = new EmailVerificationDialogFragment();
+                                emailVerification.show(getSupportFragmentManager(), EmailVerificationDialogFragment.TAG);
+                            }
+                        } else {
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+
         signinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -164,7 +199,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         progressBar.setVisibility(View.INVISIBLE);
                         contentLayout.setVisibility(View.VISIBLE);
 
-                        // ...
                     }
                 });
     }
@@ -177,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
-        if (currentUser != null){
+        if (currentUser != null && currentUser.isEmailVerified()){
             goMainWindow();
         }
         if (mAuthListener != null){
