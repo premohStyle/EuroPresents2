@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                FirebaseUser user = mAuth.getCurrentUser();
                 if (user != null){
-                    goMainWindow();
+                    goMain2Activity();
                 }
             }
         };
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         if (task.isSuccessful()) {
                             final FirebaseUser user = mAuth.getCurrentUser();
                             if (user.isEmailVerified()){
-                               goMainWindow();
+                                goMain2Activity();
                             } else {
                                 EmailVerificationDialogFragment emailVerification = new EmailVerificationDialogFragment();
                                 emailVerification.show(getSupportFragmentManager(), EmailVerificationDialogFragment.TAG);
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
-                            goMainWindow();
+                            goMain2Activity();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
         if (currentUser != null && currentUser.isEmailVerified()){
-            goMainWindow();
+            goMain2Activity();
         }
         if (mAuthListener != null){
             mAuth.removeAuthStateListener(mAuthListener);
@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
-                            goMainWindow();
+                            goMain2Activity();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -278,6 +278,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private void goMainWindow() {
         Intent intent = new Intent(this, MainWindowActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    private void goMain2Activity() {
+        Intent intent = new Intent(this, Main2Activity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

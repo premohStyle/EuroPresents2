@@ -28,6 +28,7 @@
                     android:src="@mipmap/ic_user" />
 
                 <TextView
+                    android:id="@+id/tv_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/user" />
@@ -61,6 +62,60 @@
                     android:layout_height="match_parent"
                     android:src="@mipmap/ic_settings" />
             </LinearLayout>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="20dp"
+                android:id="@+id/btnNavFrag1"
+                android:text="ACTIVOS"
+                android:background="@drawable/boton_redondeado"
+                android:textColor="@color/backgroundColor"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="20dp"
+                android:id="@+id/btnNavFrag2"
+                android:text="PROX"
+                android:background="@drawable/boton_redondeado"
+                android:textColor="@color/backgroundColor"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="20dp"
+                android:id="@+id/btnNavFrag3"
+                android:text="PART"
+                android:background="@drawable/boton_redondeado"
+                android:textColor="@color/backgroundColor"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="20dp"
+                android:id="@+id/btnNavFrag4"
+                android:text="FIN"
+                android:background="@drawable/boton_redondeado"
+                android:textColor="@color/backgroundColor"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"/>
+
         </LinearLayout>
 
         <android.support.v4.view.ViewPager

@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -115,18 +116,20 @@ public class SigninActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View arg0) {
-                if (validateForm() && currentPage != 3) {
-                    viewAnimator.setInAnimation(slide_in_right);
-                    viewAnimator.setOutAnimation(slide_out_left);
-                    viewAnimator.showNext();
-                    currentPage++;
-                    if (currentPage == 3) {
-                        buttonNext.setText(R.string.send);
+                if (validateForm()) {
+                    if (validateForm() && currentPage == 3) {
+                        contentLayout.setVisibility(View.INVISIBLE);
+                        progressBar.setVisibility(View.VISIBLE);
+                        registrarUsuario();
+                    } else {
+                        viewAnimator.setInAnimation(slide_in_right);
+                        viewAnimator.setOutAnimation(slide_out_left);
+                        viewAnimator.showNext();
+                        currentPage++;
+                        if (currentPage == 3) {
+                            buttonNext.setText(R.string.send);
+                        }
                     }
-                } else {
-                    contentLayout.setVisibility(View.INVISIBLE);
-                    progressBar.setVisibility(View.VISIBLE);
-                    registrarUsuario();
                 }
             }
         });
@@ -141,9 +144,16 @@ public class SigninActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        contentLayout.setVisibility(View.INVISIBLE);
+                        progressBar.setVisibility(View.VISIBLE);
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
                             final FirebaseUser user = firebaseAuth.getCurrentUser();
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setPhotoUri(null)
+                                    .setDisplayName(etUser.getText().toString())
+                                    .build();
+                            user.updateProfile(profileUpdates);
                             user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -199,7 +209,7 @@ public class SigninActivity extends AppCompatActivity {
                 valid = false;
             }
         } else if (this.currentPage == 3) {
-            valid = false;
+            valid = true;
         } else {
             valid = false;
         }

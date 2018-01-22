@@ -41,10 +41,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView"
-        android:hint="@string/user"
+        android:hint="@string/email"
         android:textAlignment="center"
         android:textColorHint="@color/colorAccent"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp"
+        android:inputType="textEmailAddress"/>
 
         <EditText
             android:id="@+id/et_password"
