@@ -14,7 +14,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="17dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@color/colorAccent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -64,64 +65,19 @@
             </LinearLayout>
         </LinearLayout>
 
-
-
-        <LinearLayout
+        <android.support.design.widget.TabLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:id="@+id/tab_layout"
+            app:tabTextColor="@color/colorAccent">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginTop="20dp"
-                android:id="@+id/btnNavFrag1"
-                android:text="ACTIVOS"
-                android:background="@drawable/boton_redondeado"
-                android:textColor="@color/backgroundColor"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"/>
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginTop="20dp"
-                android:id="@+id/btnNavFrag2"
-                android:text="PROX"
-                android:background="@drawable/boton_redondeado"
-                android:textColor="@color/backgroundColor"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"/>
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginTop="20dp"
-                android:id="@+id/btnNavFrag3"
-                android:text="PART"
-                android:background="@drawable/boton_redondeado"
-                android:textColor="@color/backgroundColor"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"/>
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginTop="20dp"
-                android:id="@+id/btnNavFrag4"
-                android:text="FIN"
-                android:background="@drawable/boton_redondeado"
-                android:textColor="@color/backgroundColor"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"/>
-
-        </LinearLayout>
+        </android.support.design.widget.TabLayout>
 
         <android.support.v4.view.ViewPager
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/container" >
+
         </android.support.v4.view.ViewPager>
     </LinearLayout>
 

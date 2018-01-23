@@ -1,16 +1,13 @@
 package com.project.ciaprojects.europresents;
 
 import android.content.Intent;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,10 +25,7 @@ public class Main2Activity extends AppCompatActivity {
     public FirebaseAuth firebaseAuth;
     private TextView tvUser;
 
-    private Button btnNavFrag1;
-    private Button btnNavFrag2;
-    private Button btnNavFrag3;
-    private Button btnNavFrag4;
+    TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,48 +48,9 @@ public class Main2Activity extends AppCompatActivity {
         } else {
             goMainScreen();
         }
-        btnNavFrag1 = (Button) this.findViewById(R.id.btnNavFrag1);
-        btnNavFrag2 = (Button) this.findViewById(R.id.btnNavFrag2);
-        btnNavFrag3 = (Button) this.findViewById(R.id.btnNavFrag3);
-        btnNavFrag4 = (Button) this.findViewById(R.id.btnNavFrag4);
-        Log.d(TAG, "onCreateView: started");
 
-        btnNavFrag1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                Toast.makeText(Main2Activity.this, "Sorteos activos", Toast.LENGTH_SHORT).show();
-
-                setViewPager(0);
-            }
-        });
-
-        btnNavFrag2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                Toast.makeText(Main2Activity.this, "Sorteos proximos", Toast.LENGTH_SHORT).show();
-
-                setViewPager(1);
-            }
-        });
-
-        btnNavFrag3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                Toast.makeText(Main2Activity.this, "Sorteos participando", Toast.LENGTH_SHORT).show();
-
-                setViewPager(2);
-            }
-        });
-
-        btnNavFrag4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                Toast.makeText(Main2Activity.this, "Sorteos acabados", Toast.LENGTH_SHORT).show();
-
-                setViewPager(3);
-            }
-        });
-
+        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(mViewPager);
     }
 
     private void setupViewPager(ViewPager viewPager) {

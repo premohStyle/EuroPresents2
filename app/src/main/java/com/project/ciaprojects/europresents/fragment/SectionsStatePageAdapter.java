@@ -1,5 +1,6 @@
 package com.project.ciaprojects.europresents.fragment;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,5 +32,21 @@ public class SectionsStatePageAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return mFragmentList.size();
+    }
+
+    @Nullable
+    @Override
+    public CharSequence getPageTitle(int position) {
+        if (position == 0){
+            return "Sorteos Activos";
+        } else if (position == 1){
+            return "Sorteos Proximos";
+        } else if (position == 2){
+            return "Sorteos Participados";
+        } else if (position == 3){
+            return "Sorteos Acabados";
+        } else {
+            return "";
+        }
     }
 }
