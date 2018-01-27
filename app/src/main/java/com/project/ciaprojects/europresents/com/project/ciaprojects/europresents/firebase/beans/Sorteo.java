@@ -9,15 +9,17 @@ public class Sorteo {
     private int participacionesTotales;
     private int participacionesActuales;
     private boolean finalizado;
+    private String uriPhoto;
 
     public Sorteo() {
     }
 
-    public Sorteo(String producto, int participacionesTotales, int participacionesActuales, boolean finalizado) {
+    public Sorteo(String producto, int participacionesTotales, int participacionesActuales, boolean finalizado, String uriPhoto) {
         this.producto = producto;
         this.participacionesTotales = participacionesTotales;
         this.participacionesActuales = participacionesActuales;
         this.finalizado = finalizado;
+        this.uriPhoto = uriPhoto;
     }
 
     public String getProducto() {
@@ -50,5 +52,13 @@ public class Sorteo {
 
     public void setFinalizado(boolean finalizado) {
         this.finalizado = finalizado;
+    }
+
+    public String getUriPhoto() {
+        return uriPhoto;
+    }
+
+    public void setUriPhoto(String uriPhoto) {
+        this.uriPhoto = uriPhoto;
     }
 }

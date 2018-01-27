@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
 import com.project.ciaprojects.europresents.fragment.SectionsStatePageAdapter;
 import com.project.ciaprojects.europresents.fragment.SorteosAcabadosFragment;
 import com.project.ciaprojects.europresents.fragment.SorteosActivosFragment;
@@ -23,6 +24,7 @@ public class Main2Activity extends AppCompatActivity {
     private SectionsStatePageAdapter mSectionsStatePageAdapter;
     private ViewPager mViewPager;
     public FirebaseAuth firebaseAuth;
+    public FirebaseStorage storage;
     private TextView tvUser;
 
     TabLayout tabLayout;
@@ -40,11 +42,12 @@ public class Main2Activity extends AppCompatActivity {
         setupViewPager(mViewPager);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        tvUser = (TextView) findViewById(R.id.tv_user);
+        storage = FirebaseStorage.getInstance();
+        //tvUser = (TextView) findViewById(R.id.tv_user);
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
         if (user != null) {
-            tvUser.setText(user.getDisplayName());
+            //tvUser.setText(user.getDisplayName());
         } else {
             goMainScreen();
         }
