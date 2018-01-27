@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "962759053685-fvafssnl32vgltaqq745khlae7qmps46.apps.googleusercontent.com",
+          "client_id": "962759053685-v09u9eackl3h1que4sffsg34q5ae3p12.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.project.ciaprojects.europresents",
-            "certificate_hash": "6ff21932fdbe87bd54d95311b47f421d0eb89599"
+            "certificate_hash": "a2be6258812fcef5756c420043c3b03642697be2"
           }
         },
         {
