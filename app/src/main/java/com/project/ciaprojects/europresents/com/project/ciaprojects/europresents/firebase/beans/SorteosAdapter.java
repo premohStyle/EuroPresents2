@@ -44,7 +44,7 @@ public class SorteosAdapter extends RecyclerView.Adapter<SorteosAdapter.SorteosV
         Main2Activity activity = (Main2Activity) v.getContext();
         StorageReference ref = activity.storage.getReferenceFromUrl(sorteo.getUriPhoto());
         holder.textViewProducto.setText(sorteo.getProducto());
-        holder.textViewProgreso.setText(String.valueOf(sorteo.getParticipacionesTotales() + "/" + sorteo.getParticipacionesActuales()));
+        holder.textViewProgreso.setText(String.valueOf(sorteo.getParticipacionesActuales() + "/" + sorteo.getParticipacionesTotales()));
         Glide.with(v.getContext())
                 .using(new FirebaseImageLoader())
                 .load(ref)

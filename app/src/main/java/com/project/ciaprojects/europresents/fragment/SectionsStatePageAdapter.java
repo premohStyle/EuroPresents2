@@ -40,12 +40,8 @@ public class SectionsStatePageAdapter extends FragmentStatePagerAdapter {
         if (position == 0){
             return "Sorteos Activos";
         } else if (position == 1){
-            return "Sorteos Proximos";
-        } else if (position == 2){
-            return "Sorteos Participados";
-        } else if (position == 3){
-            return "Sorteos Acabados";
-        } else {
+            return "Mis sorteos";
+        }else {
             return "";
         }
     }

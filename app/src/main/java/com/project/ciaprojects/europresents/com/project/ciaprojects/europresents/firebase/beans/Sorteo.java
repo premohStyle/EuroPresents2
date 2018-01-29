@@ -1,15 +1,20 @@
 package com.project.ciaprojects.europresents.com.project.ciaprojects.europresents.firebase.beans;
 
+import java.util.List;
+
 /**
  * Created by masdi on 26/01/2018.
  */
 
 public class Sorteo {
+    private String id;
     private String producto;
     private int participacionesTotales;
     private int participacionesActuales;
     private boolean finalizado;
     private String uriPhoto;
+
+    private List<Usuario> participantes;
 
     public Sorteo() {
     }
@@ -24,6 +29,14 @@ public class Sorteo {
 
     public String getProducto() {
         return producto;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setProducto(String producto) {
@@ -60,5 +73,13 @@ public class Sorteo {
 
     public void setUriPhoto(String uriPhoto) {
         this.uriPhoto = uriPhoto;
+    }
+
+    public List<Usuario> getParticipantes() {
+        return participantes;
+    }
+
+    public void setParticipantes(List<Usuario> participantes) {
+        this.participantes = participantes;
     }
 }

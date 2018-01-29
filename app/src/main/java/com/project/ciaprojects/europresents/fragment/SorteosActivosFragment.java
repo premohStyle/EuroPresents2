@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +29,7 @@ import java.util.List;
 public class SorteosActivosFragment extends Fragment {
     private static final String TAG = "SorteosActivosFragment";
     RecyclerView recyclerView;
+    Button btnInsertCoin;
 
     List<Sorteo> sorteos;
 
@@ -38,6 +40,14 @@ public class SorteosActivosFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sorteos_activos, container, false);
         Log.d(TAG, "onCreateView: started");
+
+        btnInsertCoin = (Button) view.findViewById(R.id.btnInsertCoin);
+        btnInsertCoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -59,6 +69,7 @@ public class SorteosActivosFragment extends Fragment {
                 for (DataSnapshot snapshot:
                         dataSnapshot.getChildren()) {
                     Sorteo sorteo = snapshot.getValue(Sorteo.class);
+                    sorteo.setId(snapshot.getRef().getRoot().getKey());
                     sorteos.add(sorteo);
                 }
                 adapter.notifyDataSetChanged();
